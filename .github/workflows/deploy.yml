@@ -1,0 +1,28 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy to api.brightsky.dev
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@master
+        env:
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        with:
+          host: api.brightsky.dev
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: SENTRY_DSN
+          script_stop: true
+          script: |
+            cd brightsky
+            git pull
+            cp -r api.brightsky.dev/. .
+            echo "SENTRY_DSN=$SENTRY_DSN" >> brightsky.env
+            ./brightsky up -d
