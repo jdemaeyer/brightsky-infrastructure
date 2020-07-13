@@ -1,0 +1,25 @@
+version: '2.4'
+
+services:
+  web:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.brightsky.rule=Host(`${HOSTNAME}`)
+      - traefik.http.routers.brightsky.entrypoints=websecure
+      - traefik.http.routers.brightsky.tls.certresolver=letsencrypt
+      - traefik.http.services.brightsky.loadbalancer.server.port=5000
+  traefik:
+    image: traefik:v2.2
+    environment:
+      - TRAEFIK_PROVIDERS_DOCKER=true
+      - TRAEFIK_PROVIDERS.DOCKER.EXPOSEDBYDEFAULT=false
+      - TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS=:443
+      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_TLSCHALLENGE=true
+      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_EMAIL=${LETSENCRYPT_EMAIL}
+      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_STORAGE=/letsencrypt/acme.json
+    ports:
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - .data/traefik/acme.json:/letsencrypt/acme.json
+    restart: always

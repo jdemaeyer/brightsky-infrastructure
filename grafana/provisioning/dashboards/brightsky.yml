@@ -1,0 +1,9 @@
+apiVersion: 1
+
+providers:
+  - name: 'Bright Sky'
+    type: file
+    editable: true
+    allowUiUpdates: false
+    options:
+      path: /etc/grafana/dashboards

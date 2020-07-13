@@ -1,0 +1,10 @@
+version: '2.4'
+
+services:
+  web:
+    labels:
+      - traefik.http.routers.brightsky.middlewares=apiauth
+      - traefik.http.middlewares.apiauth.basicauth.usersfile=/etc/brightsky/users
+  traefik:
+    volumes:
+      - .data/traefik/users:/etc/brightsky/users:ro

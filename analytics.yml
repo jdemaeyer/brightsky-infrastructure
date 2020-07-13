@@ -1,0 +1,30 @@
+version: '2.4'
+
+services:
+  traefik:
+    environment:
+      - TRAEFIK_METRICS_PROMETHEUS=true
+      - TRAEFIK_METRICS_PROMETHEUS_BUCKETS=0.03,0.05,0.1,0.3,1,5
+  prometheus:
+    image: prom/prometheus:v2.19.2
+    user: 996:996
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus.yml
+      - .data/prometheus:/prometheus
+    command:
+      - --config.file=/etc/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+    restart: always
+  grafana:
+    image: grafana/grafana:7.0.6
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/dashboards/:/etc/grafana/dashboards/
+      - .data/grafana:/var/lib/grafana
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.grafana.rule=Host(`${HOSTNAME_GRAFANA}`)
+      - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.routers.grafana.tls.certresolver=letsencrypt
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+    restart: always

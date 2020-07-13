@@ -1,0 +1,10 @@
+version: '2.4'
+
+services:
+  traefik:
+    environment:
+      - TRAEFIK_ACCESSLOG=true
+      - TRAEFIK_ACCESSLOG_FORMAT=json
+      - TRAEFIK_ACCESSLOG_FILEPATH=/log
+    volumes:
+      - .data/traefik/log:/log

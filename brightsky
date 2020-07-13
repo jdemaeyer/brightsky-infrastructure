@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+# Thin layer for calling docker-compose with each of the configuration files
+# for the modules listed in 'config', creating some empty necessary files and
+# folders along the way.
+
+if [ -f config ]; then
+  readarray -t modules < config
+else
+  modules=(brightsky local)
+fi
+
+if [ ! -f brightsky.env ]; then
+  touch brightsky.env
+fi
+
+if [[ " ${modules[@]} " =~ " traefik " ]] && [ ! -f .data/traefik/acme.json ]; then
+  mkdir -p .data/traefik
+  touch .data/traefik/acme.json
+  chmod 600 .data/traefik/acme.json
+fi
+
+if [[ " ${modules[@]} " =~ " auth " ]] && [ ! -f .data/traefik/users ]; then
+  touch .data/traefik/users
+  chmod 600 .data/traefik/users
+fi
+
+if [[ " ${modules[@]} " =~ " accesslog " ]] && [ ! -f .data/traefik/log ]; then
+  touch .data/traefik/log
+fi
+
+if [[ " ${modules[@]} " =~ " analytics " ]] && ([ ! -d .data/grafana ] || [ ! -d .data/prometheus ]); then
+  mkdir -p .data/grafana
+  chown -R 472:472 .data/grafana
+  mkdir -p .data/prometheus
+  chown -R 996:996 .data/prometheus
+fi
+
+if [ "$1" == "adduser" ]; then
+  if [ "$#" -ne 2 ]; then
+    echo "USAGE: ${0} adduser USERNAME"
+    exit 1
+  fi
+  echo "$2:$(openssl passwd -apr1)" >> .data/traefik/users
+else
+  function join_by { local d=$1; shift; echo -n "$1"; shift; printf "%s" "${@/#/$d}"; }
+  exec docker-compose -f $(join_by ".yml -f " ${modules[@]}).yml $@
+fi

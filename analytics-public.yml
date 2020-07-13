@@ -1,0 +1,6 @@
+version: '2.4'
+
+services:
+  grafana:
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=1

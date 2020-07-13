@@ -1,0 +1,6 @@
+.data
+.env
+brightsky.env
+config
+
+!/api.brightsky.dev/*
