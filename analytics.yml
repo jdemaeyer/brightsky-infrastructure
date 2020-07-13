@@ -21,6 +21,8 @@ services:
       - ./grafana/provisioning/:/etc/grafana/provisioning/
       - ./grafana/dashboards/:/etc/grafana/dashboards/
       - .data/grafana:/var/lib/grafana
+    environment:
+      - GF_SERVER_ROOT_URL=https://${HOSTNAME_GRAFANA}
     labels:
       - traefik.enable=true
       - traefik.http.routers.grafana.rule=Host(`${HOSTNAME_GRAFANA}`)
