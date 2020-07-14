@@ -25,4 +25,5 @@ jobs:
             git pull
             cp -r api.brightsky.dev/. .
             echo "SENTRY_DSN=$SENTRY_DSN" >> brightsky.env
+            ./brightsky pull
             ./brightsky up -d
