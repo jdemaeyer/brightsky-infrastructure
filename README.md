@@ -4,10 +4,13 @@ Stackable Docker Compose configurations to set up your own instance of [Bright
 Sky](https://github.com/jdemaeyer/brightsky/).
 
 This is the exact configuration used for the public Bright Sky instance at
-https://api.brightsky.dev/, which runs on a [Hetzner CX31
+https://api.brightsky.dev/, which runs on a [Hetzner CPX31
 VPS](https://www.hetzner.com/cloud#pricing), usually not using more than 4 GB
-of the available 8 GB of memory, and occupying about 20 GB of disk space for
-all weather records starting January 1, 2010.
+of the available 8 GB of memory, and occupying about 40 GB of disk space for
+all weather records starting January 1, 2010. The smaller CX31 VPS worked well
+for handling about half a million requests per day with an average response
+time near 30 ms, and only needed to be replaced with the CPX31 when we hit a
+million requests per day.
 
 
 ## Setup instructions
