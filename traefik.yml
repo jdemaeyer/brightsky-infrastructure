@@ -7,9 +7,11 @@ services:
       - traefik.http.routers.brightsky.rule=Host(`${HOSTNAME}`)
       - traefik.http.routers.brightsky.entrypoints=websecure
       - traefik.http.routers.brightsky.tls.certresolver=letsencrypt
+      - traefik.http.routers.brightsky.middlewares=compress
+      - traefik.http.middlewares.compress.compress=true
       - traefik.http.services.brightsky.loadbalancer.server.port=5000
   traefik:
-    image: traefik:v2.2
+    image: traefik:v2.10
     environment:
       - TRAEFIK_PROVIDERS_DOCKER=true
       - TRAEFIK_PROVIDERS.DOCKER.EXPOSEDBYDEFAULT=false
