@@ -16,7 +16,7 @@ services:
       - --storage.tsdb.path=/prometheus
     restart: always
   grafana:
-    image: grafana/grafana:7.0.6
+    image: grafana/grafana:7.5.17
     volumes:
       - ./grafana/provisioning/:/etc/grafana/provisioning/
       - ./grafana/dashboards/:/etc/grafana/dashboards/
