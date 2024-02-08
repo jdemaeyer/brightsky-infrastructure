@@ -10,6 +10,8 @@ x-brightsky:
     - BRIGHTSKY_DATABASE_URL=postgres://postgres:pgpass@postgres
     - BRIGHTSKY_REDIS_URL=redis://redis
   env_file: brightsky.env
+  volumes:
+    - .data/brightsky:/app/.cache
 
 services:
   postgres:
