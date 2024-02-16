@@ -6,4 +6,4 @@ services:
       # XXX: This disables the apiauth middleware if it was enabled
       - traefik.http.routers.brightsky.middlewares=apiratelimit,compress
       - traefik.http.middlewares.apiratelimit.ratelimit.average=${BRIGHTSKY_RATELIMIT_AVERAGE:-10}
-      - traefik.http.middlewares.apiratelimit.ratelimit.burst=${BRIGHTSKY_RATELIMIT_AVERAGE:-50}
+      - traefik.http.middlewares.apiratelimit.ratelimit.burst=${BRIGHTSKY_RATELIMIT_BURST:-50}
