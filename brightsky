@@ -44,5 +44,5 @@ if [ "$1" == "adduser" ]; then
   echo "$2:$(openssl passwd -apr1)" >> .data/traefik/users
 else
   function join_by { local d=$1; shift; echo -n "$1"; shift; printf "%s" "${@/#/$d}"; }
-  exec docker-compose -f $(join_by ".yml -f " ${modules[@]}).yml $@
+  exec docker compose -f $(join_by ".yml -f " ${modules[@]}).yml $@
 fi
