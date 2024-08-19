@@ -8,6 +8,9 @@ services:
       - traefik.http.routers.brightsky.entrypoints=websecure
       - traefik.http.routers.brightsky.tls.certresolver=letsencrypt
       - traefik.http.routers.brightsky.middlewares=compress
+      - traefik.http.routers.insecurebrightsky.rule=Host(`${HOSTNAME}`)
+      - traefik.http.routers.insecurebrightsky.entrypoints=web
+      - traefik.http.routers.insecurebrightsky.middlewares=compress
       - traefik.http.middlewares.compress.compress=true
       - traefik.http.services.brightsky.loadbalancer.server.port=5000
   traefik:
@@ -15,11 +18,13 @@ services:
     environment:
       - TRAEFIK_PROVIDERS_DOCKER=true
       - TRAEFIK_PROVIDERS.DOCKER.EXPOSEDBYDEFAULT=false
+      - TRAEFIK_ENTRYPOINTS_WEB_ADDRESS=:80
       - TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS=:443
       - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_TLSCHALLENGE=true
       - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_EMAIL=${LETSENCRYPT_EMAIL}
       - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_STORAGE=/letsencrypt/acme.json
     ports:
+      - 80:80
       - 443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
