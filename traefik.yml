@@ -14,7 +14,7 @@ services:
       - traefik.http.middlewares.compress.compress=true
       - traefik.http.services.brightsky.loadbalancer.server.port=5000
   traefik:
-    image: traefik:v2.11
+    image: traefik:v3.3
     environment:
       - TRAEFIK_PROVIDERS_DOCKER=true
       - TRAEFIK_PROVIDERS.DOCKER.EXPOSEDBYDEFAULT=false
